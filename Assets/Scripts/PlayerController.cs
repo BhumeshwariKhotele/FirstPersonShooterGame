@@ -19,6 +19,9 @@ public class PlayerController : MonoBehaviour
     public LayerMask groundMask;
     public float runSpeed;
     public Animator anim;
+    public GameObject bullet;
+    public Transform firePoint;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -28,9 +31,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //moveInput.x = Input.GetAxis("Horizontal") * moveSpeed * Time.deltaTime;
-        //moveInput.z = Input.GetAxis("Vertical") * moveSpeed * Time.deltaTime;
-
+   
         Vector3 horzMove = transform.right * Input.GetAxis("Horizontal");
         Vector3 vertMove = transform.forward * Input.GetAxis("Vertical");
         
@@ -68,7 +69,7 @@ public class PlayerController : MonoBehaviour
         {
             moveInput.y = jumpForce;
             canDoubleJump = false;
-
+ 
         }
 
         characterController.Move(moveInput*Time.deltaTime);
@@ -86,6 +87,13 @@ public class PlayerController : MonoBehaviour
         }
         transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y + mouseInput.x, transform.rotation.eulerAngles.z);
         cameraTrans.rotation = Quaternion.Euler(cameraTrans.transform.rotation.eulerAngles + new Vector3(mouseInput.y, 0f, 0f));
+
+
+        // shooting the bullet
+        if(Input.GetMouseButtonDown(0))
+        {
+            Instantiate(bullet, firePoint.position, firePoint.rotation);
+        }
 
         anim.SetFloat("MoveSpeed", moveInput.magnitude);
         anim.SetBool("OnGround", canJump);
